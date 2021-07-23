@@ -1,0 +1,26 @@
+{% extends './base.html' %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block body %}
+
+    <div id="signup" class="container justify-content-center">
+        <div class="row justify-content-center">
+            <div class="col-10 col-xl-6 col-lg-6 justify-content-center p-3">
+                <h2>Sign Up</h2> <hr>
+                <form class="form-group p-3" method="POST" action="">
+                    {% csrf_token %}
+                    <input type="email" name="email" id="" placeholder="Email" class="form-control"> <br>
+                    <input type="password" name="password" placeholder="Password" id="" class="form-control"> <br>
+                    <input type="text" name="first_name" placeholder="First Name" id="" class="form-control"> <br>
+                    <input type="text" name="last_name" placeholder="Last Name" id="" class="form-control"> <br>
+                    <input type="submit" value="Login" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

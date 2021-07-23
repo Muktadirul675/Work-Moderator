@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'css/add_work.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="p-5">
+        <h3>Add Work to {{project.name}}</h3>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{form.media}}
+            {{form.as_p}}
+            <input type="submit" value="Add" class="btn btn-primary">
+        </form>    
+    </div>
+{% endblock %}
+

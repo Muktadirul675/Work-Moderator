@@ -1,0 +1,42 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="container" id="work">
+        <div class="row p-4">
+            <div class="col-12 col-lg-9 col-xl-9">
+                <h3>{{work.header}}</h3>
+                <h6>{{work.time}}</h6> <br>
+                {{work.work|safe}} <br>
+            <a href="{% url 'app:project' project_id %}">Go Back To Project</a> <br>
+            {% if project.owner == user %}
+                <h5>Change Status:</h5>
+                <form action="" method="POST" class="form-group">
+                    <input type="radio" name="status" value="Completed" id=""> Completed <span class="mx-1"></span>
+                    <input type="radio" name="status" value="Not Completed" id=""> Not Completed  <span class="mx-1"></span>
+                    <input type="radio" name="status" value="Hidden" id=""> Hidden <br>
+                    <input type="submit" value="Change" class="btn btn-primary">
+                </form>
+            {% endif %}
+            </div>
+            <div class="col-12 col-lg-3 col-xl-3">
+                {% if work.assigned_to == None %}
+                    <h5>This work is assigned to none.</h5>
+                {% else %}
+                    <h5>This work is assigned to {{work.assigned_to}}</h5>
+                {% endif %}
+                <ol>
+                {% for i in work.files.all %}
+                    <li><a href="{{i.file.url}}">{{i.file}} [{{i.user.username}}]</a></li> 
+                {% endfor %}
+                </ol>
+                <form action="" enctype="multipart/form-data" class="form-group" method="POST">
+                    {% csrf_token %}
+                    {{form.as_p}} 
+                    <input type="submit" value="Attach" class="btn btn-secondary">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

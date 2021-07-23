@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/project.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div id="project" class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-2 col-xl-2 p-3 bg-light sidebar">
+            <h4>{{p.name}}</h4>
+            <h6>Admin: <a href="">{{p.owner.first_name}}</a> </h6>
+            <hr>
+            <ul id="sidebar_navs">
+                <li onclick="details()">Details</li>
+                <li onclick="clb()">Collaborators</li>
+                <li onclick="works()">Works</li>
+                <hr>
+                <li class="leave" onclick="leave()">Leave Project</li>
+                {% if p.owner.username == user.username %}
+                <hr>
+                <li onclick="ap()">Admin Panel</li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="col-12 col-lg-10 col-xl-10 p-3" id="content">
+
+        </div>
+        <div id="contents">
+            <div id="details">
+                {% for m in messages %}
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    {{m}}
+                </div>
+                {% endfor %}
+                <script>
+                    $(document).ready(() => {
+                        window.setTimeout(() => {
+                            $(".alert").fadeTo(500, 0).slideUp(500, () => {
+                                $(this).remove();
+                            })
+                        }, 5000)
+                    })
+                </script>
+                <h2>{{p.name}}</h2>
+                <p>
+                    This project was created by <b><a href="">{{p.owner.first_name}}</a></b> on <b>{{p.time}}</b> <br>
+                    Project Code: <b>{{p.code}}-{{p.pro_id}}</b>
+                </p>
+                {{p.description|safe}}
+            </div>
+            <div id="collaborators">
+                <h4>Collaborators:</h4>
+                <ol>
+                    {% for c in p.collaborators.all %}
+                    <li>{{c.user.first_name}} {{c.user.last_name}} <br>{{c.user.email}} <br>[{{c.user.username}}] </li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div id="works">
+                <h4>Works:</h4>
+                {% block works %}
+                <button onclick="all_work()" class="btn btn-primary m-1">All Works</button>
+                <button onclick="your_work()" class="btn btn-primary m-1">Your Works</button>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="works_list" class="col-12 py-3">
+
+                        </div>
+                        <!-- <div class="col-12 col-lg-4 col-xl-4">
+                            <ol>
+                                <h4>Works Completed:</h4>
+                                {% for w in works %}
+                                {% if w.status == "Completed" %}
+                                <li> {{w.header}} </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </div> -->
+                    </div>
+                </div>
+                {% endblock %}
+            </div>
+            <div class="work_deck">
+                <div class="all_works">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6">
+                                Work
+                            </div>
+                            <div class="col-4">
+                                User
+                            </div>
+                            <div class="col-2">
+                                Done/Not
+                            </div>
+                        </div> <br>
+                        {% for w in works %}
+                        {% if w.status != "Hidden" %}
+                        <div class="row">
+                            <div class="col-6">
+                                <a href="{% url 'app:work' p.pro_id w.id %}">{{w.header}}</a>
+                            </div>
+                            <div class="col-4">
+                                {% if w.assigned_to == None %}
+                                This work is assigned to none.
+                                {% else %}
+                                {{w.assigned_to.first_name}}
+                                {% endif %}
+                            </div>
+                            <div class="col-2">
+                                {% if w.status == "Completed" %}
+                                <i class="fas fa-check"></i>
+                                {% endif %}
+                                {% if w.status == "Not Completed" %}
+                                <img style="width: 20px; height: 20px;" src="{% static 'icons/cancel.png' %}" alt="">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="your_works">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6">
+                                Work
+                            </div>
+                            <div class="col-4">
+                                User
+                            </div>
+                            <div class="col-2">
+                                Done/Not
+                            </div>
+                        </div> <br>
+                        {% for w in works %}
+                        {% if w.status != "Hidden" and w.assigned_to == user %}
+                        <div class="row">
+                            <div class="col-7">
+                                <a href="{% url 'app:work' p.pro_id w.id %}">{{w.header}}</a>
+                            </div>
+                            <div class="col-3">
+                                {{w.assigned_to.first_name}}
+                            </div>
+                            <div class="col-2">
+                                {% if w.status == "Completed" %}
+                                <i class="fas fa-check " style="color: rgb(0, 218, 0);"></i>
+                                {% endif %}
+                                {% if w.status == "Not Completed" %}
+                                <img style="width: 20px; height: 20px; color: red;" src="{% static 'icons/cancel.png' %}" alt="">
+                                {% endif %}
+                            </div>
+                        </div> <hr>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+            <div id="leave">
+                <div class="container-fluid justify-content-center">
+                    <div class="row justify-content-center">
+                        <div class="col-12 justify-content-center">
+                            <h3>Are you sure you want to leave?</h3>
+                            <h4>If yes, <a href="{% url 'app:leave' p.pro_id %}">Leave</a></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="admin">
+                {% block admin %}
+                <h2>Admin Panel</h2>
+                <a href="{% url 'app:add_work' p.pro_id %}" class="btn btn-primary">
+                    Add Work
+                </a>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-6">
+                            Work
+                        </div>
+                        <div class="col-4">
+                            User
+                        </div>
+                        <div class="col-2">
+                            Done/Not
+                        </div>
+                    </div> <br>
+                    {% for w in works %}
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="{% url 'app:work' p.pro_id w.id %}">{{w.header}}</a>
+                        </div>
+                        <div class="col-4">
+                            {% if w.assigned_to == None %}
+                            This work is assigned to none.
+                            {% else %}
+                            {{w.assigned_to.first_name}}
+                            {% endif %} <br>
+                            <div class="dropdown">
+                                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Assign this work to
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {% for i in users %}
+                                    <a href="{% url 'app:assign_work' p.pro_id w.id i.id %}"
+                                        class="dropdown-item">{{i.user.first_name}} {{i.user.last_name}}
+                                        [{{i.user.username}}] </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            {% if w.status == "Completed" %}
+                            <i class="fas fa-check"></i>
+                            {% endif %}
+                            {% if w.status == "Not Completed" %}
+                            <img style="width: 20px; height: 20px;" src="{% static 'icons/cancel.png' %}" alt="">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div> 
+                <div class="container-fluid">
+                    <h3>Collaborators:</h3>
+                    {% for c in p.collaborators.all %}
+                        <div class="row">
+                            <div class="col-6">
+                                {{c.user.first_name}} {{c.user.last_name}} [{{c.user}}]
+                            </div>
+                            <div class="col-3">
+                                <a href="{% url 'app:kick' p.pro_id c.id %}">Kick</a>
+                            </div>
+                            <div class="col-3">
+                                <a href="">Make Admin</a>
+                            </div>
+                        </div> <hr>
+                    {% endfor %}
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/project.js' %}"></script>
+{% endblock %}

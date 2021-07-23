@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div id="home" class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" action="{% url 'app:join_project' %}" id="join_form" class="form-group p-5">
+                <h3>Welcome to Work Moderator 😄 </h3>
+                {% if user.is_authenticated %}
+                    <div class="input-group">
+                        {% csrf_token %}
+                        <input type="text" name="code" id="" placeholder="Project code" class="form-control">
+                        <input type="submit" class="btn btn-primary" value="Join!">
+                    </div>
+                    <a href="{% url 'app:create_project' %}" class="btn btn-primary my-2">Create a new project</a> 
+                    {% if last_project %}
+                        <h5 style="color: white">Last Project: <br> <a href="{% url 'app:project' last_project.pro_id %}">{{last_project.name}} </a> </h5>
+                    {% endif %}
+                {% else %}
+                    <a class="btn btn-primary" href="{% url 'app:login' %}">Login To continue</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,44 @@
+
+
+.sidebar{
+    height: 91vh;
+}
+
+#sidebar_navs li{
+    list-style: none;
+    margin-top: 15px;
+    transition: 0.2s all;
+    cursor: pointer;
+}
+
+#sidebar_navs li:hover{
+    border-left: 2.5px solid purple;
+    padding-left: 8px;
+    color: purple;
+}
+
+#contents > div{
+    display: none;
+}
+
+#content{
+    height: 91vh;
+    overflow-y: scroll;
+}
+
+.leave{
+    color: red;
+}
+
+.leave:hover{
+    color: red;
+    border-left: 2.5px solid red;
+}
+
+@media(max-width: 999px){
+    .sidebar{
+        height: fit-content;
+        position: inherit;
+    }
+}
+

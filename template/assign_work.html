@@ -1,0 +1,17 @@
+{% extends './project.html' %}
+
+{% block admin %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h3>Assign work</h3>
+                <form action="" method="POST">
+                    {% for i in users %}
+                        <input type="radio" name="user" value="{{i.id}}" id=""> {{i.user.first_name}} {{i.user.last_name}} [{{i.user.username}}] <br>
+                    {% endfor %}    
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

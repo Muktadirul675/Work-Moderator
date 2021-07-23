@@ -1,0 +1,30 @@
+{% extends './base.html' %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block body %}
+
+    <div id="login" class="container justify-content-center">
+        <div class="row justify-content-center">
+            <div class="col-10 col-xl-6 col-lg-6 justify-content-center p-3">
+                <h2>Login</h2> <hr>
+                {% for m in messages %}
+                    <div class="alert alert-danger my-1" role="alert">
+                        {{m}}
+                    </div>
+                {% endfor %}
+                <form class="form-group p-3" method="POST" action="">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="User ID" id="" class="form-control"> <br>
+                    <input type="password" name="password" placeholder="Password" id="" class="form-control"> <br>
+                    <input type="submit" value="Login" class="btn btn-primary">
+                </form>
+                <a href="{% url 'app:sign_up' %}">Don't have an account? Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
