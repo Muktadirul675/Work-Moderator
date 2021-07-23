@@ -156,7 +156,7 @@ def get_user_id():
     count = 0
     for i in User.objects.all():
         count += 1
-    
+    count += 1
     str_count = str(count)
     trailing = ""
     for i in range(4-len(str_count)):
