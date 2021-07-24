@@ -36,12 +36,10 @@ def is_a_collaborator(project, user):
 
 def home(request):
     if request.user.is_authenticated:
-        last_project = None
-        projects = list(request.user.projects.all())
-        if last_project:
-            last_project = projects[-1]
-        cont = {'last_project': last_project}
-        return render(request, 'home.html', cont)
+        return redirect(f"profile/{request.user.username}")
+    return render(request, 'home.html')
+
+def homepage(request):
     return render(request, 'home.html')
 
 @login_required(login_url="/login/")
@@ -96,7 +94,7 @@ def join_project(request):
 def project(request, id):
     project = models.Project.objects.get(pro_id=id)
     if is_a_collaborator(project, request.user):
-        works = project.works.all()
+        works = list(reversed(project.works.all()))
         add_work_form = forms.AddWork()
         users = project.collaborators.all()
         cont = {'p':project,'works':works, 'add_work_form':add_work_form,'users':users}
@@ -143,11 +141,12 @@ def user_login(request):
 
             if user is not None:
                 login(request,user)
+                messages.info(request, 'Logged in successfully.')
             else:
                 messages.error(request, 'Sorry, the user id or the password is incorrect!')
                 return redirect("app:login")
 
-            return redirect('app:home')
+            return redirect(f'/profile/{user.username}')
         
         return render(request,'login.html')
 
@@ -230,7 +229,11 @@ def work(request,project_id,work_id):
                 last_file = models.File.objects.last()
                 last_file.work = work
                 last_file.user = request.user
-                work.status = "Completed"
+                if work.assigned_to:
+                    if last_file.user == work.assigned_to:
+                        work.status = "Completed"
+                else:
+                    work.status = "Completed"
                 work.save()
                 last_file.save()
             else:
@@ -239,6 +242,14 @@ def work(request,project_id,work_id):
         return render(request, 'work.html', cont)
     else:
         return redirect("tmc:home")
+
+def change_work_status(request,project_id, work_id):
+    work = models.Work.objects.get(pk=work_id)
+    if request.method == 'POST':
+        status = request.POST['status']
+        work.status = status
+        work.save()
+    return redirect(f"/project/{project_id}/work/{work_id}/")
 
 @login_required(login_url="/login/")
 def assign_work(request,project_id ,work_id, user_id):
@@ -253,7 +264,7 @@ def assign_work(request,project_id ,work_id, user_id):
     else:
         return redirect("app:home")
 
-def edit_work(request,project_id,work_id):
+# def edit_work(request,project_id,work_id):
     project = models.Project.objects.get(pro_id=project_id)
     work = models.Work.objects.get(pj=work_id)
 
@@ -280,5 +291,11 @@ def kick(request,project_id,user_id):
         collaborator.delete()
     else:
         return redirect("app:home")
+
+    return redirect(f"/project/{project_id}/")
+
+def delete_work(request,project_id,work_id ):
+    work = models.Work.objects.get(pk=work_id)
+    work.delete()
 
     return redirect(f"/project/{project_id}/")

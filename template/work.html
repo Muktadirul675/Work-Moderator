@@ -6,28 +6,24 @@
         <div class="row p-4">
             <div class="col-12 col-lg-9 col-xl-9">
                 <h3>{{work.header}}</h3>
-                <h6>{{work.time}}</h6> <br>
-                {{work.work|safe}} <br>
-            <a href="{% url 'app:project' project_id %}">Go Back To Project</a> <br>
-            {% if project.owner == user %}
-                <h5>Change Status:</h5>
-                <form action="" method="POST" class="form-group">
-                    <input type="radio" name="status" value="Completed" id=""> Completed <span class="mx-1"></span>
-                    <input type="radio" name="status" value="Not Completed" id=""> Not Completed  <span class="mx-1"></span>
-                    <input type="radio" name="status" value="Hidden" id=""> Hidden <br>
-                    <input type="submit" value="Change" class="btn btn-primary">
-                </form>
-            {% endif %}
+                <h6>{{work.time}}</h6> 
+                <h6>{{work.status}}</h6><br>
+                {{work.work|safe}} <br> <hr><br>
+                <a href="{% url 'app:project' project_id %}">Go Back To Project</a> <br> <br>
             </div>
             <div class="col-12 col-lg-3 col-xl-3">
                 {% if work.assigned_to == None %}
                     <h5>This work is assigned to none.</h5>
                 {% else %}
-                    <h5>This work is assigned to {{work.assigned_to}}</h5>
+                    <h5>This work is assigned to  {{work.assigned_to.first_name}} {{work.assigned_to.last_name}} <br> [{{work.assigned_to}}]</h5>
                 {% endif %}
                 <ol>
                 {% for i in work.files.all %}
-                    <li><a href="{{i.file.url}}">{{i.file}} [{{i.user.username}}]</a></li> 
+                    {% if i.user == work.assigned_to %}
+                        <li><a style="color: rgb(0, 201, 0);" href="{{i.file.url}}">{{i.file_name}} <br> [{{i.user.first_name}} {{i.user.username}}]</a></li> 
+                    {% else %}
+                        <li><a href="{{i.file.url}}">{{i.file_name}} <br> [{{i.user.first_name}} {{i.user.username}}]</a></li> 
+                    {% endif %}
                 {% endfor %}
                 </ol>
                 <form action="" enctype="multipart/form-data" class="form-group" method="POST">
@@ -35,6 +31,21 @@
                     {{form.as_p}} 
                     <input type="submit" value="Attach" class="btn btn-secondary">
                 </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {% if project.owner == user %}
+                    <h5>Change Status:</h5>
+                    <form action="{% url 'app:change_work_status' project.pro_id work.id %}" method="POST" class="form-group">
+                        {% csrf_token %}
+                        <input type="radio" name="status" value="Completed" id=""> Completed <span class="mx-1"></span>
+                        <input type="radio" name="status" value="Not Completed" id=""> Not Completed  <span class="mx-1"></span>
+                        <input type="radio" name="status" value="Hidden" id=""> Hidden <br>
+                        <input type="submit" value="Change" class="btn btn-primary">
+                    </form> <br>
+                    <a href="{% url 'app:delete_work' project.pro_id work.id %}" class="btn btn-danger">Delete this work</a><br><br>
+                {% endif %}
             </div>
         </div>
     </div>

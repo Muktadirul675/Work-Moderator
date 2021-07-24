@@ -42,6 +42,70 @@ INSTALLED_APPS = [
     'app',
 ]
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        # Toolbar configuration
+        # name - Toolbar name
+        # items - The buttons enabled in the toolbar
+        'toolbar_DefaultToolbarConfig': [
+            {
+                'name': 'basicstyles',
+                'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript',
+                          'Superscript', ],
+            },
+            {
+                'name': 'paragraph',
+                'items': ['NumberedList', 'BulletedList', 'Outdent', 'Indent',
+                          'HorizontalRule', 'JustifyLeft', 'JustifyCenter',
+                          'JustifyRight', 'JustifyBlock', ],
+            },
+            {
+                'name': 'format',
+                'items': ['Format', 'Styles'],
+            },
+            {
+                'name': 'extra',
+                'items': ['Link', 'Unlink', 'Blockquote', 'Image', 'Table',
+                          'CodeSnippet', 'Mathjax', 'Embed', ],
+            },
+            {
+                'name': 'source',
+                'items': ['Maximize', 'Source', ],
+            },
+        ],
+
+        # This hides the default title provided by CKEditor
+        'title': False,
+
+        # Use this toolbar
+        'toolbar': 'DefaultToolbarConfig',
+
+        
+        'linkShowTargetTab': False,
+        'linkShowAdvancedTab': False,
+
+        # CKEditor height and width settings
+        'height': '250px',
+        'width': 'auto',
+        'forcePasteAsPlainText ': True,
+
+        # Class used inside span to render mathematical formulae using latex
+        'mathJaxClass': 'mathjax-latex',
+
+        # Mathjax library link to be used to render mathematical formulae
+        'mathJaxLib': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_SVG',
+
+        # Tab = 4 spaces inside the editor
+        'tabSpaces': 4,
+
+        # Extra plugins to be used in the editor
+        'extraPlugins': ','.join([
+            # 'devtools',  # Shows a tooltip in dialog boxes for developers
+            'mathjax',
+        ]),
+    }
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

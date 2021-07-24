@@ -37,10 +37,12 @@ class AddWork(forms.ModelForm):
 class AttachFile(forms.ModelForm):
     class Meta:
         model = models.File
-        fields = {'file'}
+        fields = {'file_name','file',}
         labels = {
+            'file_name':'File Name',
             'file': 'Project Attachment '          
         }
         widgets = {
+            'file_name': forms.TextInput(attrs={'class':'form-control'}),
             'file' : forms.FileInput(attrs={'class':'form-control'})
         }

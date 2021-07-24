@@ -35,10 +35,39 @@
     border-left: 2.5px solid red;
 }
 
+
 @media(max-width: 999px){
     .sidebar{
         height: fit-content;
         position: inherit;
+    }
+    .sidebar ul{
+        padding: 0;
+    }
+    .sidebar ul hr{
+        display: none;
+    }
+    .sidebar ul li{
+        float: left;
+    }
+    .sidebar ul li::after{
+        content: "|";
+        padding: 3px;
+        color: black;
+    }
+    .sidebar ul li:last-child::after{
+        content: "";
+    }
+    #sidebar_navs li{
+        margin-top: 0px;
+    }
+    #sidebar_navs li:hover{
+        border-left: 0px;
+        padding-left:0px;
+        color: #0d6efd;
+    }
+    #content{
+        height: fit-content;
     }
 }
 

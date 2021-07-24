@@ -9,6 +9,7 @@ app_name = 'app'
 
 urlpatterns = [
     path("",  views.home, name="home"),
+    path('homepage/', views.homepage,name="homepage"),
     path('create_project/', views.create_project, name="create_project"),
     path("project/<int:id>/", views.project, name="project"),
     path('login/', views.user_login ,name="login"),
@@ -19,6 +20,8 @@ urlpatterns = [
     path('project/<int:project_id>/add_work/', views.add_work, name="add_work"),
     path('project/<int:project_id>/work/<int:work_id>/assign_work/<int:user_id>/', views.assign_work, name="assign_work"),
     path('project/<int:project_id>/work/<int:work_id>/', views.work,name='work'),
+    path('project/<int:project_id>/work/<int:work_id>/delete/', views.delete_work, name='delete_work'),
+    path('project/<int:project_id>/work/<int:work_id>/change_status/',views.change_work_status, name="change_work_status"),
     path('project/<int:project_id>/leave/', views.leave, name='leave'),
     path('project/<int:project_id>/user/<int:user_id>/kick/',views.kick, name="kick"),
 ] 

@@ -24,9 +24,14 @@
                 {% else %}
                     <h5>Projects you own:</h5>
                     <ol>
-                        {% for p in projects_own %}
-                            <li><a href="{% url 'app:project' p.pro_id %}">{{p.name}}</a> </li>
-                        {% endfor %}
+                            <div class="row">
+                            {% for p in projects_own %}
+                                <a href="{% url 'app:project' p.pro_id %}" class="col-11 col-xl-4 col-lg-4 m-lg-1 m-xl-1 m-sm-0 my-1 m-md-0 project_card bg-light shadow-sm p-3">
+                                    <h5>{{p.name}}</h5>
+                                    Admin: {{p.owner.first_name}}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </ol>
                 {% endif %} <hr>
                 {% if projects_in_count == 0 %}
@@ -34,11 +39,17 @@
                 {% else %}
                     <h5>Projects you are in: </h5>
                     <ol>
-                        {% for p in projects_in %}
-                            <li><a href="{% url 'app:project' p.project.pro_id %}">{{p.project.name}}</a> </li>
-                        {% endfor %}
+                        <div class="row">
+                            {% for p in projects_in %}
+                                <a href="{% url 'app:project' p.project.pro_id %}" class="col-11 col-xl-4 col-lg-4  m-lg-1 m-xl-1 my-1 m-sm-0 m-md-0 project_card bg-light shadow-sm p-3">
+                                    <h5>{{p.project.name}}</h5>
+                                    Admin: {{p.project.owner.first_name}}
+                                </a>
+                            {% endfor %}    
+                        </div>
                     </ol>
                 {% endif %}
+                <a href="{% url 'app:home' %}" class="btn btn-primary">Join Another Project</a>
             </div>
         </div>
     </div>

@@ -53,6 +53,7 @@ class Work(models.Model):
         return f"{self.project} {self.assigned_to}"
 
 class File(models.Model):
+    file_name = models.CharField(max_length=1000)
     work = models.ForeignKey(Work, related_name='files', on_delete=models.CASCADE, null=True)
     file = models.FileField(upload_to='file/')
     user = models.ForeignKey(User, related_name='files', on_delete=models.CASCADE, null=True)
