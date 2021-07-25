@@ -237,7 +237,7 @@ def work(request,project_id,work_id):
 
         return render(request, 'work.html', cont)
     else:
-        return redirect("tmc:home")
+        return redirect("app:home")
 
 def change_work_status(request,project_id, work_id):
     work = models.Work.objects.get(pk=work_id)
