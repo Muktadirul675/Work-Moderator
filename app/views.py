@@ -229,11 +229,7 @@ def work(request,project_id,work_id):
                 last_file = models.File.objects.last()
                 last_file.work = work
                 last_file.user = request.user
-                if work.assigned_to:
-                    if last_file.user == work.assigned_to:
-                        work.status = "Completed"
-                else:
-                    work.status = "Completed"
+                work.status = "Completed"
                 work.save()
                 last_file.save()
             else:
