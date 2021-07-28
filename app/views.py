@@ -119,7 +119,7 @@ def add_work(request,project_id):
                 return redirect(f"/project/{project_id}/")
         return render(request, 'add_work.html',cont)
     else:
-        return redirect("tmc:home")
+        return redirect("app:home")
 
 def make_id(num):
     trailing = ""
